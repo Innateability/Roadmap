@@ -107,7 +107,6 @@ def add_road_map():
         assigned_to_ids = request.form.getlist("assigned_tos[]")
         print(assigned_to_ids)
         assigned_tos = Authentication.query.filter(Authentication.id.in_(assigned_to_ids)).all()
-
         now = datetime.now()
         if RoadMap.query.filter_by(firm=firm).first():
             flash(f"Road Map for {firm} already exists ","error")
@@ -146,6 +145,7 @@ def edit_road_map(rm_id):
         customer_party = request.form.get("customer_party")
         assigned_to_ids = request.form.getlist("assigned_tos[]")
         print(assigned_to_ids)
+        print(deal_size)
         assigned_tos = Authentication.query.filter(Authentication.id.in_(assigned_to_ids)).all()
         road_map.status = status
         road_map.industry = industry

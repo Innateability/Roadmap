@@ -1,9 +1,11 @@
 {% extends "base.html" %}
 {% set page_title = "Road Maps" %}
 {% block content %}
+{% if state == "admin" %}
 <div class="page-header">
     <a href="{{ url_for('admin.add_road_map') }}" class="btn btn-primary" >+ Add Road Map</a>
 </div>
+{% endif %}
 {% if road_maps %}
 <div class="obj-list">
     {% if state == "admin" %}
