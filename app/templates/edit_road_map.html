@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% set page_title = "Edit RoadMap" %}
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Edit RoadMap</h1>
+    </div>
+</div>
+<div style="max-width:660px">
+    <div class="card">
+        <div class="card-header"><span class="card-title">{{ road_map.firm }}</span></div>
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('admin.edit_road_map' if role=='admin' else 'employee.edit_road_map', rm_id=road_map.id) }}">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Firm</label>
+                        <p>{{ road_map.firm|upper }}</p>
+                    </div>
+                </div>
+                {% if state == "admin" %}
+                <div class="form-group">
+                    <label>Year</label>
+                    <input type="number" value="{{ road_map.year }}" name="year" placeholder="2025" min="2020" max="2099" required>
+                </div>
+                <div class="form-group">
+                    <label>Modules</label>
+                    <select name="modules[]" value="{{ road_map.modules }}"id="modules" multiple size="1">
+                        {% for module in modules %}
+                        <option {% if module in road_map.modules %}selected{% endif %}>{{module}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Reffered By</label>
+                    <input type="text" value="{{ road_map.reffered_by }}" name="refferred_by">
+                </div>
+                <div class="form-group">
+                    <label>Participants</label>
+                    <select name="assigned_tos[]" id="assigned_tos" multiple size="1">
+                        {% for name_auth in names_auth %}
+                        <option {% if name_auth in road_map.assigned_to %}selected{% endif %} value="{{ name_auth.id }}">{{name_auth.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Deal Size</label>
+                    <input type="number" value="{{ road_map.deal_size }}" name="deal_size">
+                </div>
+                <div class="form-group">
+                    <label>Exp Closure Date</label>
+                    <input type="text" value="{{ road_map.exp_closure_date }}" id="expClosureDate" name="exp_closure_date">
+                </div>
+                {% endif %}
+                <div class="form-group">
+                    <label>Industry</label>
+                    <input type="text" value="{{ road_map.industry }}" name="industry" placeholder="e.g. Telecommunications" required>
+                </div>
+                <div class="form-group">
+                    <label>Customer Party</label>
+                    <input type="text" value="{{ road_map.customer_party }}" name="customer_party">
+                </div>
+                <div class="form-group">
+                    <label>opportunity_stage</label>
+                    <select name="opportunity_stage" value="{{ road_map.Participants }}" id="assigned_tos">
+                        {% for opportunity_stage in opportunity_stages %}
+                        <option {% if road_map.opportunity_stage == opportunity_stage %}selected{% endif %}>{{opportunity_stage}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div style="padding:14px 22px;border-top:1px solid var(--ash-mid);display:flex;justify-content:flex-end;gap:10px">
+                    <a href="{{ url_for('admin.home'if role=='admin' else 'employee.home') }}" class="btn btn-ghost">Cancel</a>
+                    <button type="submit" class="btn btn-primary">Edit Road Map</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+document.querySelector("form").addEventListener("submit", function(e) {
+    const w = parseFloat(document.getElementById("w").value);
+    const sr = parseFloat(document.getElementById("sr").value);
+    let msg = "";
+    if (w > 100) msg += "Weight cannot exceed 100%.\n";
+    if (sr > 100) msg += "Score range cannot exceed 100.\n";
+    if (msg) { e.preventDefault(); alert(msg); }
+});
+</script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+  const startPicker = flatpickr("#expClosureDate", {
+    enableTime: true,
+    dateFormat: "Y-m-d H:i",
+    minDate: "today",
+    onChange: function(selectedDates) {
+      endPicker.set("minDate", selectedDates[0]);
+    }
+  });
+</script>
+{% endblock %}

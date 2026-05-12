@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% set page_title = "Objective Batches" %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Select Road Map</h1>
+    </div>
+    {% if state == "admin" %}
+    <div class="welcome-actions">
+        <a href="{{ url_for('admin.add_road_map') }}" class="btn btn-">+ Add Road Map</a>
+    </div>
+    {% endif %}
+</div>
+<div class="obj-list">
+    {% if state == "admin" %}
+    {% set endpoints = "admin.road_map_overview" %}
+    {% elif state == "employee" %}
+    {% set endpoints = "employee.road_map_overview" %}
+    {% endif %}
+    {% for road_map in road_maps %}
+    <a href="{{ url_for(endpoints, rm_id=road_map.id) }}" class="obj-card">
+        <div>
+            <div class="obj-card-title">{{ road_map.firm }}</div>
+            <div class="obj-card-meta">
+                <span>{{ road_map.industry }}</span>
+            </div>
+        </div>
+        <div class="obj-card-right">
+            <span class="btn btn-sm btn-outline">View Road Map &rarr;</span>
+        </div>
+    </a>
+    {% else %}
+    <div class="empty-state">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+        <h3>No Road Maps Found</h3>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}
